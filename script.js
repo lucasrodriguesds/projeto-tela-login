@@ -56,14 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       
-      try {
-        await signIn(email, password);
-        console.log("Autenticação bem-sucedida!");
-        await addAuditLog(null, 'LOGIN', `Usuário ${email} logou com sucesso.`);
-        alert("Login realizado com sucesso!");
-        localStorage.setItem('loggedUser', email);
-        window.location.href = "dashboard.html";
-      } catch (error) {
+        try {
+          const userCredential = await signIn(email, password);
+          console.log("Autenticação bem-sucedida!");
+          await addAuditLog(userCredential.user.uid, 'LOGIN', `Usuário ${email} logou com sucesso.`);
+          alert("Login realizado com sucesso!");
+          localStorage.setItem('loggedUser', email);
+          window.location.href = "dashboard.html";
+        } catch (error) {
+
         document.getElementById('password-error').innerText = "E-mail ou senha incorretos ou erro de conexão.";
         isValid = false;
       }
