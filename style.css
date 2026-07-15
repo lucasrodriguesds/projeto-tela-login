@@ -199,3 +199,34 @@ a:hover {
   text-decoration: none;
 }
 
+/* Avatar Styles */
+.avatar-profile {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.avatar-option {
+  font-size: 1.5rem;
+  padding: 10px;
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+}
+
+.avatar-option:hover {
+  border-color: var(--primary-color);
+}
+

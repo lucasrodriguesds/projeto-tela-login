@@ -4,7 +4,24 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head><body><div class="container">
-  <h2 id="welcome-message">Olá, <span id="user-name">...</span> 👋</h2>
+  <!-- Seção do Avatar -->
+  <div class="avatar-profile">
+    <div id="current-avatar" class="avatar-icon">👤</div>
+    <h2 id="welcome-message">Olá, <span id="user-name">...</span> 👋</h2>
+    <button id="toggle-avatar-btn" class="secondary-btn">Alterar Avatar</button>
+  </div>
+
+  <!-- Seleção de Avatar (Oculta por padrão) -->
+  <div id="avatar-selection" class="details-box" style="display: none;">
+    <p>Escolha um novo avatar:</p>
+    <div class="avatar-grid">
+      <button class="avatar-option" data-id="avatar_01">😎</button>
+      <button class="avatar-option" data-id="avatar_02">🚀</button>
+      <button class="avatar-option" data-id="avatar_03">💡</button>
+      <button class="avatar-option" data-id="avatar_04">🎨</button>
+    </div>
+  </div>
+
   <div class="info-grid">
     <p><strong>Plano:</strong> <span id="user-plan">...</span></p>
     <p><strong>Conta criada em:</strong> <span id="account-created">...</span></p>
