@@ -196,16 +196,17 @@ a:hover {
 
 .menu-actions a {
   padding: 10px;
-  background-color: white;
+  background-color: var(--input-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   text-align: center;
-  color: var(--text-color);
+  color: var(--text-color) !important;
+  display: block;
 }
 
 .menu-actions a:hover {
   border-color: var(--primary-color);
-  background-color: #f9fafb;
+  background-color: var(--bg-color);
   text-decoration: none;
 }
 
@@ -230,7 +231,7 @@ a:hover {
 .avatar-option {
   font-size: 1.5rem;
   padding: 10px;
-  background: white;
+  background: var(--input-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
