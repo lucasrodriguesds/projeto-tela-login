@@ -68,8 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         if (!user) throw new Error("Usuário não autenticado");
         
-        await window.db.collection('users').doc(user.uid).update({ avatar: newAvatarId });
-        console.log("Avatar atualizado no Firestore.");
+        // Use set com {merge: true} para criar o documento se não existir ou atualizar se existir
+        await window.db.collection('users').doc(user.uid).set({ avatar: newAvatarId }, { merge: true });
+        console.log("Avatar atualizado no Firestore (via set com merge).");
 
         // Atualizar visualmente
         const avatarMap = { avatar_01: '😎', avatar_02: '🚀', avatar_03: '💡', avatar_04: '🎨' };
