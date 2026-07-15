@@ -12,22 +12,35 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log("Buscando dados do usuário no Firestore...");
       // Preencher nome e dados básicos do Firestore
       const userDoc = await window.db.collection('users').doc(user.uid).get();
+      
+      let userData;
       if (userDoc.exists) {
         console.log("Dados encontrados:", userDoc.data());
-        const userData = userDoc.data();
-        document.getElementById('user-name').innerText = userData.login || 'Usuário';
-        document.getElementById('user-plan').innerText = userData.plano || 'Basico';
-        
-        // Exibir avatar
-        const avatarMap = { avatar_01: '😎', avatar_02: '🚀', avatar_03: '💡', avatar_04: '🎨' };
-        document.getElementById('current-avatar').innerText = avatarMap[userData.avatar] || '👤';
-        
-        // Data de criação (se disponível)
-        if (userData.createdAt) {
-          document.getElementById('account-created').innerText = userData.createdAt.toDate().toLocaleDateString('pt-BR');
-        }
+        userData = userDoc.data();
       } else {
-        console.warn("Documento do usuário não encontrado no Firestore!");
+        console.warn("Documento não encontrado, criando padrão...");
+        userData = {
+            login: user.email.split('@')[0],
+            email: user.email,
+            plano: "Basico",
+            avatar: "avatar_01",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        await window.db.collection('users').doc(user.uid).set(userData);
+      }
+      
+      document.getElementById('user-name').innerText = userData.login || 'Usuário';
+      document.getElementById('user-plan').innerText = userData.plano || 'Basico';
+      
+      // Exibir avatar
+      const avatarMap = { avatar_01: '😎', avatar_02: '🚀', avatar_03: '💡', avatar_04: '🎨' };
+      document.getElementById('current-avatar').innerText = avatarMap[userData.avatar] || '👤';
+      
+      // Data de criação (se disponível)
+      if (userData.createdAt) {
+        document.getElementById('account-created').innerText = userData.createdAt.toDate().toLocaleDateString('pt-BR');
+      } else {
+        document.getElementById('account-created').innerText = 'Data indisponível';
       }
       
       // Último acesso (do Firebase Auth)
@@ -50,18 +63,28 @@ document.addEventListener('DOMContentLoaded', () => {
       const newAvatarId = btn.getAttribute('data-id');
       const user = window.auth.currentUser;
       
+      console.log("Tentando atualizar avatar para:", newAvatarId, "do usuário:", user ? user.uid : "null");
+      
       try {
+        if (!user) throw new Error("Usuário não autenticado");
+        
         await window.db.collection('users').doc(user.uid).update({ avatar: newAvatarId });
+        console.log("Avatar atualizado no Firestore.");
+
         // Atualizar visualmente
         const avatarMap = { avatar_01: '😎', avatar_02: '🚀', avatar_03: '💡', avatar_04: '🎨' };
         document.getElementById('current-avatar').innerText = avatarMap[newAvatarId];
         document.getElementById('avatar-selection').style.display = 'none';
         
         // Logar ação
+        console.log("Chamando addAuditLog...");
         await addAuditLog(user.uid, 'UPDATE_AVATAR', `Usuário alterou avatar para ${newAvatarId}`);
+        console.log("Log registrado.");
+        
         alert("Avatar atualizado!");
       } catch (error) {
         console.error("Erro ao atualizar avatar:", error);
+        alert("Erro ao atualizar: " + error.message);
       }
     });
   });
