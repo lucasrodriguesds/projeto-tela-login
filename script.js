@@ -1,15 +1,5 @@
-// Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAbscO_j9cwn-50OH6M7G4p9z3sqtSnqXQ",
-  authDomain: "tela-de-login---opencode.firebaseapp.com",
-  projectId: "tela-de-login---opencode",
-  storageBucket: "tela-de-login---opencode.firebasestorage.app",
-  messagingSenderId: "504371411989",
-  appId: "1:504371411989:web:5a9c524436cb7a22dba21c",
-  measurementId: "G-7LMVFK291N"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+// Firebase setup is handled in firebase-config.js
+// auth and db are available globally
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form');
@@ -67,7 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('password').value;
       
       try {
-        await auth.signInWithEmailAndPassword(email, password);
+        await signIn(email, password);
+        console.log("Autenticação bem-sucedida!");
+        await addAuditLog(null, 'LOGIN', `Usuário ${email} logou com sucesso.`);
         alert("Login realizado com sucesso!");
         localStorage.setItem('loggedUser', email);
         window.location.href = "dashboard.html";
@@ -91,18 +83,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (isValid) {
         try {
           console.log("Iniciando autenticação...");
-          await auth.createUserWithEmailAndPassword(email, password);
+          const userCredential = await signUp(email, password);
           console.log("Autenticação bem-sucedida!");
           
           // Salvar dados adicionais no Firestore
           console.log("Tentando salvar no Firestore...");
           const login = document.getElementById('login').value;
-          await firebase.firestore().collection('users').add({
+          await db.collection('users').add({
             login: login,
             email: email,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           console.log("Dados salvos no Firestore com sucesso!");
+          await addAuditLog(userCredential.user.uid, 'SIGNUP', `Usuário ${email} cadastrado com sucesso.`);
 
           alert("Cadastro realizado com sucesso!");
           window.location.href = "index.html"; // Redirecionar para o login
