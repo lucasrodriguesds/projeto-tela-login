@@ -87,12 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
           const userCredential = await signUp(email, password);
           console.log("Autenticação bem-sucedida!");
           
-          // Salvar dados adicionais no Firestore
+          // Salvar dados adicionais no Firestore usando o UID como ID do documento
           console.log("Tentando salvar no Firestore...");
           const login = document.getElementById('login').value;
-          await db.collection('users').add({
+          await window.db.collection('users').doc(userCredential.user.uid).set({
             login: login,
             email: email,
+            plano: "Basico",
+            avatar: "avatar_01",
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           });
           console.log("Dados salvos no Firestore com sucesso!");

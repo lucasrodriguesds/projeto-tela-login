@@ -1,32 +1,22 @@
-<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><div class="container"><h2>Bem-vindo!</h2><p id="welcome-message" style="text-align: center; margin-bottom: 20px;"></p>
-<button id="toggle-info-btn" class="secondary-btn">Ver detalhes</button>
-<div id="user-details" class="details-box" style="display: none;">
-  <p><strong>E-mail cadastrado:</strong> <span id="user-email-display"></span></p>
-  <p><strong>Status:</strong> Ativo</p>
+<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head><body><div class="container">
+  <h2 id="welcome-message">Olá, <span id="user-name">...</span> 👋</h2>
+  <div class="info-grid">
+    <p><strong>Plano:</strong> <span id="user-plan">...</span></p>
+    <p><strong>Conta criada em:</strong> <span id="account-created">...</span></p>
+    <p><strong>Último acesso:</strong> <span id="last-access">...</span></p>
+  </div>
+  <div class="menu-actions">
+    <a href="#">Notificações</a>
+    <a href="#">Configurações</a>
+  </div>
+  <button id="logout-btn" style="margin-top: 15px;">Sair</button>
 </div>
-<button id="logout-btn" style="margin-top: 15px;">Sair</button></div><script>
-    const email = localStorage.getItem('loggedUser');
-    if (!email) {
-      window.location.href = 'index.html';
-    } else {
-      document.getElementById('welcome-message').innerText = 'Você está logado.';
-      document.getElementById('user-email-display').innerText = email;
-    }
-
-    document.getElementById('toggle-info-btn').addEventListener('click', () => {
-      const details = document.getElementById('user-details');
-      const btn = document.getElementById('toggle-info-btn');
-      if (details.style.display === 'none') {
-        details.style.display = 'block';
-        btn.innerText = 'Ocultar detalhes';
-      } else {
-        details.style.display = 'none';
-        btn.innerText = 'Ver detalhes';
-      }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      localStorage.removeItem('loggedUser');
-      window.location.href = 'index.html';
-    });
-  </script></body></html>
+<script src="firebase-config.js"></script>
+<script src="database.js"></script>
+<script src="dashboard.js"></script>
+</body></html>

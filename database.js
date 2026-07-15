@@ -1,6 +1,6 @@
 const addAuditLog = async (userId, action, details) => {
   try {
-    await db.collection('audit_logs').add({
+    await window.db.collection('audit_logs').add({
       userId: userId,
       action: action,
       details: details,
